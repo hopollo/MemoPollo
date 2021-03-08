@@ -57,6 +57,9 @@ const Login = ({ navigation }) => {
           flex: 1,
           justifyContent: "space-evenly",
           alignItems: "center",
+          width: "100%",
+          marginTop: 5,
+          marginBottom: 10
         }}
       >
         <View>
@@ -69,7 +72,12 @@ const Login = ({ navigation }) => {
           </Text>
         </View>
 
-        <View>
+        <View
+          style={{
+            flex: 1,
+            width: "90%",
+          }}
+        >
           <Input
             placeholder="Email"
             placeholderTextColor="white"
@@ -110,15 +118,31 @@ const Login = ({ navigation }) => {
             }
             leftIconContainerStyle={{ marginRight: 10 }}
           />
+
+          <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
+            <Text style={{ color: "red", fontSize: 12, textAlign: "center", textDecorationLine: "underline", fontWeight: "bold" }}>
+              Mot de passe oublié
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {errorText.length > 1 ? (
           <View>
-            <Text style={{ color: 'white', fontWeight: "bold", backgroundColor: "red", padding: 10, borderRadius: 15 }}>{errorText}</Text>
+            <Text
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                backgroundColor: "red",
+                padding: 10,
+                borderRadius: 15,
+              }}
+            >
+              {errorText}
+            </Text>
           </View>
-        ): null}
+        ) : null}
 
-        <View>
+        <View style={{ marginBottom: 10 }}>
           <Button
             title="Valider"
             disabled={disabled}
@@ -127,6 +151,7 @@ const Login = ({ navigation }) => {
             onPress={connectUser}
           />
         </View>
+        
         <View>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
