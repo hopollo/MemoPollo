@@ -119,7 +119,7 @@ const Login = ({ navigation }) => {
             leftIconContainerStyle={{ marginRight: 10 }}
           />
 
-          <TouchableOpacity onPress={() => navigation.navigate("Forgot")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Forget")}>
             <Text style={{ color: "red", fontSize: 12, textAlign: "center", textDecorationLine: "underline", fontWeight: "bold" }}>
               Mot de passe oublié
             </Text>
@@ -151,7 +151,7 @@ const Login = ({ navigation }) => {
             onPress={connectUser}
           />
         </View>
-        
+
         <View>
           <TouchableOpacity onPress={() => navigation.navigate("Register")}>
             <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>

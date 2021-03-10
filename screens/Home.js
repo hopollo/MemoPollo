@@ -42,9 +42,7 @@ const Home = ({ navigation }) => {
             justifyContent: "space-between",
           }}
         >
-          <TouchableOpacity
-            onLongPress={() => auth.signOut()}
-          >
+          <TouchableOpacity onLongPress={() => auth.signOut()}>
             <Avatar
               rounded
               source={{
@@ -105,7 +103,8 @@ const Home = ({ navigation }) => {
       db.collection("memos")
         .where("whitelisted", "array-contains", authUser.uid)
         .get()
-        .then((docs) => docs.docs.map((d) => setMemo(d.id)));
+        .then((docs) => docs.docs.map((d) => setMemo(d.id)))
+        .catch((err) => alert(err.message));
     });
   }
 
@@ -123,7 +122,6 @@ const Home = ({ navigation }) => {
       .doc(memo)
       .collection("posts")
       .orderBy("createdAt", "desc")
-      .limit(20)
       .onSnapshot((snap) =>
         setPosts(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
       );
@@ -180,36 +178,37 @@ const Home = ({ navigation }) => {
                 flexDirection: "row",
               }}
             >
-              {posts.map(({ id, createdAt, author, text, done }) => (
-                <TouchableOpacity
-                  onLongPress={() => markDone(id)}
-                  key={id}
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    background: done ? "#18181b" : "#464649",
-                    height: 50,
-                    marginTop: 15,
-                    borderTopRightRadius: 25,
-                    borderBottomRightRadius: 25,
-                  }}
-                >
-                  <Text
+              {posts.length > 0 &&
+                posts.map(({ id, createdAt, author, text, done }) => (
+                  <TouchableOpacity
+                    onLongPress={() => markDone(id)}
+                    key={id}
                     style={{
-                      color: "white",
-                      fontSize: 20,
-                      fontWeight: done ? "normal" : "bold",
-                      padding: 10,
-                      marginLeft: 5,
-                      marginRight: 5,
-                      textDecorationLine: done ? "line-through" : "none",
+                      flex: 1,
+                      justifyContent: "center",
+                      background: done ? "#18181b" : "#464649",
+                      height: 50,
+                      marginTop: 15,
+                      borderTopRightRadius: 25,
+                      borderBottomRightRadius: 25,
                     }}
                   >
-                    {text} (
-                    {createdAt.toDate().toLocaleDateString("fr-FR", options)})
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 20,
+                        fontWeight: done ? "normal" : "bold",
+                        padding: 10,
+                        marginLeft: 5,
+                        marginRight: 5,
+                        textDecorationLine: done ? "line-through" : "none",
+                      }}
+                    >
+                      {text} (
+                      {createdAt.toDate().toLocaleDateString("fr-FR", options)})
+                    </Text>
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

@@ -1,60 +1,36 @@
 import React from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  SafeAreaView,
-  Image,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Input, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { auth } from "../services/firebase";
 
-const Register = ({ navigation }) => {
+const Forget = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showLoading, setShowLoading] = React.useState(false);
-  const [samePassword, setSamePassword] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
+  const [showLoading, setShowLoading] = React.useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Register",
+      title: "Forget",
       headerShown: false,
     });
   }, []);
 
   React.useEffect(() => {
-    if (
-      email.length < 12 ||
-      password.length < 3 ||
-      password !== confirmPassword
-    ) {
+    if (email.length < 12) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
-  }, [email, password, confirmPassword]);
+  }, [email]);
 
-  React.useEffect(() => {
-    const unsub = auth.onAuthStateChanged((authUser) => {
-      if (authUser) navigation.replace("Home");
-    });
-
-    return unsub;
-  }, []);
-
-  const registerUser = async () => {
+  const resetUser = async () => {
     setShowLoading(true);
 
     auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((credentials) => {
+      .sendPasswordResetEmail(email)
+      .then((val) => {
         if (credentials) navigation.replace("Home");
       })
       .catch((err) => console.error(err.message));
@@ -70,7 +46,7 @@ const Register = ({ navigation }) => {
           flex: 1,
           justifyContent: "space-evenly",
           alignItems: "center",
-          width: '100%',
+          width: "100%",
         }}
       >
         <View>
@@ -79,13 +55,13 @@ const Register = ({ navigation }) => {
 
         <View>
           <Text style={{ color: "white", fontWeight: "bold", fontSize: 35 }}>
-            Enregistrement
+            Changer de mot passe
           </Text>
         </View>
 
         <View
           style={{
-            width: "90%"
+            width: "90%",
           }}
         >
           <Input
@@ -106,47 +82,6 @@ const Register = ({ navigation }) => {
             }
             leftIconContainerStyle={{ marginRight: 10 }}
           />
-
-          <Input
-            placeholder="Password"
-            placeholderTextColor="white"
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={!showPassword}
-            style={{ color: "white" }}
-            inputContainerStyle={{ borderBottomColor: "white" }}
-            leftIcon={<Icon name="key" size={25} color="white" />}
-            rightIcon={
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Icon
-                  name={!showPassword ? "eye" : "eye-slash"}
-                  size={20}
-                  color="white"
-                />
-              </TouchableOpacity>
-            }
-            leftIconContainerStyle={{ marginRight: 10 }}
-          />
-
-          <Input
-            placeholder="Re-enter password"
-            placeholderTextColor="white"
-            onChangeText={(text) => setConfirmPassword(text)}
-            value={confirmPassword}
-            secureTextEntry
-            onSubmitEditing={registerUser}
-            style={{ color: "white" }}
-            inputContainerStyle={{ borderBottomColor: "white" }}
-            leftIcon={<Icon name="key" size={25} color="white" />}
-            rightIcon={
-              <Icon
-                name={samePassword ? "check-circle" : "times-cricle"}
-                size={20}
-                color="white"
-              />
-            }
-            leftIconContainerStyle={{ marginRight: 10 }}
-          />
         </View>
 
         <View>
@@ -155,7 +90,7 @@ const Register = ({ navigation }) => {
             disabled={disabled}
             loading={showLoading}
             buttonStyle={{ width: 150, height: 50 }}
-            onPress={registerUser}
+            onPress={resetUser}
           />
         </View>
 
@@ -189,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Register;
+export default Forget;
