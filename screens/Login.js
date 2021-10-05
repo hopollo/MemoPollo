@@ -3,7 +3,8 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Input, Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { db, auth } from "../services/firebase";
+import { auth } from "../services/firebase";
+import { SafeAreaView } from "react-native";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
@@ -48,119 +49,131 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#2974FA", "#38ABFD", "#43D4FF"]}
-      style={styles.container}
-    >
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          width: "100%",
-          marginTop: 5,
-          marginBottom: 10
-        }}
+      <LinearGradient
+        colors={["#2974FA", "#38ABFD", "#43D4FF"]}
+        style={styles.container}
       >
-        <View>
-          <Icon name="user-circle" size={130} color="white" />
-        </View>
-
-        <View>
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 50 }}>
-            Memo'Pollo
-          </Text>
-        </View>
-
         <View
           style={{
             flex: 1,
-            width: "90%",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            width: "100%",
+            marginTop: 5,
+            marginBottom: 10,
           }}
         >
-          <Input
-            placeholder="Email"
-            placeholderTextColor="white"
-            onChangeText={(text) => setEmail(text)}
-            value={email}
-            style={{ color: "white" }}
-            inputContainerStyle={{ borderBottomColor: "white" }}
-            autoFocus
-            leftIcon={
-              <Icon
-                name="user"
-                size={25}
-                color="white"
-                style={{ padding: 5 }}
-              />
-            }
-            leftIconContainerStyle={{ marginRight: 10 }}
-          />
-
-          <Input
-            placeholder="Password"
-            placeholderTextColor="white"
-            onChangeText={(text) => setPassword(text)}
-            value={password}
-            secureTextEntry={!showPassword}
-            onSubmitEditing={connectUser}
-            style={{ color: "white" }}
-            inputContainerStyle={{ borderBottomColor: "white" }}
-            leftIcon={<Icon name="key" size={25} color="white" />}
-            rightIcon={
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                <Icon
-                  name={!showPassword ? "eye" : "eye-slash"}
-                  size={20}
-                  color="white"
-                />
-              </TouchableOpacity>
-            }
-            leftIconContainerStyle={{ marginRight: 10 }}
-          />
-
-          <TouchableOpacity onPress={() => navigation.navigate("Forget")}>
-            <Text style={{ color: "red", fontSize: 12, textAlign: "center", textDecorationLine: "underline", fontWeight: "bold" }}>
-              Mot de passe oublié
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {errorText.length > 1 ? (
           <View>
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                backgroundColor: "red",
-                padding: 10,
-                borderRadius: 15,
-              }}
-            >
-              {errorText}
+            <Icon name="user-circle" size={130} color="white" />
+          </View>
+
+          <View>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 50 }}>
+              Memo'Pollo
             </Text>
           </View>
-        ) : null}
 
-        <View style={{ marginBottom: 10 }}>
-          <Button
-            title="Valider"
-            disabled={disabled}
-            loading={showLoading}
-            buttonStyle={{ width: 150, height: 50 }}
-            onPress={connectUser}
-          />
-        </View>
+          <View
+            style={{
+              flex: 1,
+              width: "90%",
+            }}
+          >
+            <Input
+              placeholder="Email"
+              placeholderTextColor="white"
+              onChangeText={(text) => setEmail(text)}
+              value={email}
+              style={{ color: "white" }}
+              inputContainerStyle={{ borderBottomColor: "white" }}
+              autoFocus
+              leftIcon={
+                <Icon
+                  name="user"
+                  size={25}
+                  color="white"
+                  style={{ padding: 5 }}
+                />
+              }
+              leftIconContainerStyle={{ marginRight: 10 }}
+            />
 
-        <View>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={{ color: "white", fontSize: 18, fontWeight: "bold" }}>
-              créer un compte
-            </Text>
-          </TouchableOpacity>
+            <Input
+              placeholder="Password"
+              placeholderTextColor="white"
+              onChangeText={(text) => setPassword(text)}
+              value={password}
+              secureTextEntry={!showPassword}
+              onSubmitEditing={connectUser}
+              style={{ color: "white" }}
+              inputContainerStyle={{ borderBottomColor: "white" }}
+              leftIcon={<Icon name="key" size={25} color="white" />}
+              rightIcon={
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Icon
+                    name={!showPassword ? "eye" : "eye-slash"}
+                    size={20}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              }
+              leftIconContainerStyle={{ marginRight: 10 }}
+            />
+
+            <TouchableOpacity onPress={() => navigation.navigate("Forget")}>
+              <Text
+                style={{
+                  color: "red",
+                  fontSize: 12,
+                  textAlign: "center",
+                  textDecorationLine: "underline",
+                  fontWeight: "bold",
+                }}
+              >
+                Mot de passe oublié
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {errorText.length > 1 ? (
+            <View>
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  backgroundColor: "red",
+                  padding: 10,
+                  borderRadius: 15,
+                }}
+              >
+                {errorText}
+              </Text>
+            </View>
+          ) : null}
+
+          <View style={{ marginBottom: 10 }}>
+            <Button
+              title="Valider"
+              disabled={disabled}
+              loading={showLoading}
+              buttonStyle={{ width: 150, height: 50 }}
+              onPress={connectUser}
+            />
+          </View>
+
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text
+                style={{ color: "white", fontSize: 18, fontWeight: "bold" }}
+              >
+                créer un compte
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </LinearGradient>
+      </LinearGradient>
   );
 };
 

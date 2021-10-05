@@ -115,7 +115,7 @@ const Home = ({ navigation }) => {
   }, []);
 
   React.useEffect(() => {
-    if (!memo) return;
+    if (!memo) return handleUserAuth();
 
     const unsub = db
       .collection("memos")
@@ -134,6 +134,7 @@ const Home = ({ navigation }) => {
       return db
         .collection("memos")
         .add({ whitelisted: [auth.currentUser.uid] })
+        .then(() => alert("Nouveau salon crée ! "))
         .catch((err) => alert(err.message));
 
     await db
@@ -150,8 +151,9 @@ const Home = ({ navigation }) => {
     setMemoText("");
   };
 
-  const markDone = (id) => {
-    db.collection("memos")
+  const markDone = async (id) => {
+    await db
+      .collection("memos")
       .doc(memo)
       .collection("posts")
       .doc(id)
@@ -167,51 +169,44 @@ const Home = ({ navigation }) => {
         colors={["#2974FA", "#38ABFD", "#43D4FF"]}
         style={{ flex: 1 }}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={90}
+        <ScrollView
+          style={{
+            flex: 1,
+            flexDirection: "column",
+          }}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView
-              style={{
-                flex: 1,
-                flexDirection: "row",
-              }}
-            >
-              {posts.length > 0 &&
-                posts.map(({ id, createdAt, author, text, done }) => (
-                  <TouchableOpacity
-                    onLongPress={() => markDone(id)}
-                    key={id}
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      background: done ? "#18181b" : "#464649",
-                      height: 50,
-                      marginTop: 15,
-                      borderTopRightRadius: 25,
-                      borderBottomRightRadius: 25,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: "white",
-                        fontSize: 20,
-                        fontWeight: done ? "normal" : "bold",
-                        padding: 10,
-                        marginLeft: 5,
-                        marginRight: 5,
-                        textDecorationLine: done ? "line-through" : "none",
-                      }}
-                    >
-                      {text} (
-                      {createdAt.toDate().toLocaleDateString("fr-FR", options)})
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-            </ScrollView>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+          {posts.length > 0 &&
+            posts.map(({ id, createdAt, author, text, done }) => (
+              <TouchableOpacity
+                onLongPress={() => markDone(id)}
+                key={id}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  backgroundColor: done ? "#18181b" : "#464649",
+                  height: 50,
+                  marginTop: 15,
+                  borderTopRightRadius: 25,
+                  borderBottomRightRadius: 25,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 20,
+                    fontWeight: done ? "normal" : "bold",
+                    padding: 10,
+                    marginLeft: 5,
+                    marginRight: 5,
+                    textDecorationLine: done ? "line-through" : "none",
+                  }}
+                >
+                  {text} (
+                  {createdAt.toDate().toLocaleDateString("fr-FR", options)})
+                </Text>
+              </TouchableOpacity>
+            ))}
+        </ScrollView>
       </LinearGradient>
     </SafeAreaView>
   );
